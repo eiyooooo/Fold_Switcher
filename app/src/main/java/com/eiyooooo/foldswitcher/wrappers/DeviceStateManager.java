@@ -1,4 +1,4 @@
-package com.eiyooooo.foldswitcher;
+package com.eiyooooo.foldswitcher.wrappers;
 
 import android.annotation.SuppressLint;
 import android.hardware.devicestate.DeviceStateInfo;
@@ -13,13 +13,24 @@ import rikka.shizuku.ShizukuBinderWrapper;
 import rikka.shizuku.SystemServiceHelper;
 
 public final class DeviceStateManager {
-    static DeviceStateManager deviceStateManager;
+    private static volatile DeviceStateManager instance;
+
+    public static DeviceStateManager getInstance() throws ReflectiveOperationException {
+        if (instance == null) {
+            synchronized (DeviceStateManager.class) {
+                if (instance == null) {
+                    instance = new DeviceStateManager();
+                }
+            }
+        }
+        return instance;
+    }
 
     private final IInterface manager;
     private final Class<?> managerCls;
 
     @SuppressLint({"BlockedPrivateApi", "PrivateApi"})
-    public DeviceStateManager() throws ReflectiveOperationException {
+    private DeviceStateManager() throws ReflectiveOperationException {
         manager = getService();
         managerCls = manager.getClass();
     }
