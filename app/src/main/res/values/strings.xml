@@ -5,4 +5,10 @@
     <string name="manager">Manager</string>
     <string name="log">Log</string>
     <string name="settings">Settings</string>
+
+    <string name="Shizuku_icon">Shizuku icon</string>
+    <string name="Shizuku_explanation">Fold Switcher needs Shizuku to perform operation</string>
+    <string name="Shizuku_setup_instruction">Installation and Configuration Instruction</string>
+    <string name="Shizuku_request_permission">Grant permission to Fold Switcher</string>
+    <string name="Shizuku_warning">After granting Shizuku permissions, the software will have more privileges than ordinary applications. Please be aware of your device\'s security.</string>
 </resources>

@@ -5,4 +5,10 @@
     <string name="manager">管理</string>
     <string name="log">日志</string>
     <string name="settings">设置</string>
+
+    <string name="Shizuku_icon">Shizuku图标</string>
+    <string name="Shizuku_explanation">折叠屏切换器需要Shizuku来执行操作</string>
+    <string name="Shizuku_setup_instruction">安装与配置说明</string>
+    <string name="Shizuku_request_permission">授予本软件权限</string>
+    <string name="Shizuku_warning">授予Shizuku权限后软件将获得超过普通应用的权限，请注意自身设备的安全。</string>
 </resources>
