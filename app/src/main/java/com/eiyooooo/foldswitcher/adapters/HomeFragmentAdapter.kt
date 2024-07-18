@@ -1,16 +1,16 @@
 package com.eiyooooo.foldswitcher.adapters
 
 import android.annotation.SuppressLint
+import androidx.lifecycle.LiveData
 import com.eiyooooo.foldswitcher.types.ShizukuStatus
-import com.eiyooooo.foldswitcher.viewmodels.HomeFragmentViewModel
 import com.eiyooooo.foldswitcher.views.ShizukuStatusViewHolder
 import rikka.recyclerview.IdBasedRecyclerViewAdapter
 import rikka.recyclerview.IndexCreatorPool
 
-class HomeFragmentAdapter(homeModel: HomeFragmentViewModel) : IdBasedRecyclerViewAdapter(ArrayList()) {
+class HomeFragmentAdapter(shizukuStatus: LiveData<ShizukuStatus?>) : IdBasedRecyclerViewAdapter(ArrayList()) {
 
     init {
-        homeModel.shizukuStatus.observeForever {
+        shizukuStatus.observeForever {
             updateData(it)
         }
         setHasStableIds(true)

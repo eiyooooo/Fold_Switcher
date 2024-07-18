@@ -6,19 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import com.eiyooooo.foldswitcher.adapters.HomeFragmentAdapter
 import com.eiyooooo.foldswitcher.databinding.FragmentHomeBinding
-import com.eiyooooo.foldswitcher.viewmodels.HomeFragmentViewModel
+import com.eiyooooo.foldswitcher.types.ShizukuStatus
 import rikka.recyclerview.addEdgeSpacing
 import rikka.recyclerview.addItemSpacing
 import rikka.recyclerview.fixEdgeEffect
 
-class HomeFragment : Fragment() {
+class HomeFragment(private val shizukuStatus: LiveData<ShizukuStatus?>) : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 
-    private val homeModel by viewModels<HomeFragmentViewModel>()
-    private val adapter by lazy { HomeFragmentAdapter(homeModel) }
+    private val adapter by lazy { HomeFragmentAdapter(shizukuStatus) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +29,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter.updateData(homeModel.shizukuStatus.value)
+        adapter.updateData(shizukuStatus.value)
 
         val recyclerView = binding.list
         recyclerView.adapter = adapter
