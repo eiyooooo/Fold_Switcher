@@ -1,18 +1,26 @@
 package com.eiyooooo.foldswitcher.viewmodels
 
 import android.content.pm.PackageManager
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.eiyooooo.foldswitcher.types.ShizukuStatus
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import rikka.shizuku.Shizuku
 
 class MainActivityViewModel : ViewModel() {
+    companion object {
+        private var checkShizukuPermissionJob: Job? = null
+    }
+
     private val _shizukuStatus: MutableStateFlow<ShizukuStatus?> by lazy { MutableStateFlow(null) }
-    val shizukuStatus: Flow<ShizukuStatus?> = _shizukuStatus
+    val shizukuStatus: LiveData<ShizukuStatus?> = _shizukuStatus.asLiveData()
 
     private val binderReceivedListener = Shizuku.OnBinderReceivedListener {
         checkShizukuPermission()
@@ -55,6 +63,20 @@ class MainActivityViewModel : ViewModel() {
                 _shizukuStatus.value = ShizukuStatus.HAVE_PERMISSION
             } else {
                 _shizukuStatus.value = ShizukuStatus.NO_PERMISSION
+            }
+        }
+    }
+
+    fun stopCheckingShizukuPermission() {
+        checkShizukuPermissionJob?.cancel()
+        checkShizukuPermissionJob = null
+    }
+
+    fun startCheckingShizukuPermission() {
+        checkShizukuPermissionJob = viewModelScope.launch {
+            while (isActive) {
+                delay(1000)
+                checkShizukuPermission()
             }
         }
     }
