@@ -6,18 +6,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import com.eiyooooo.foldswitcher.adapters.HomeFragmentAdapter
 import com.eiyooooo.foldswitcher.databinding.FragmentHomeBinding
-import com.eiyooooo.foldswitcher.types.ShizukuStatus
+import com.eiyooooo.foldswitcher.viewmodels.MainActivityViewModel
 import rikka.recyclerview.addEdgeSpacing
 import rikka.recyclerview.addItemSpacing
 import rikka.recyclerview.fixEdgeEffect
 
-class HomeFragment(private val shizukuStatus: LiveData<ShizukuStatus?>) : Fragment() {
+class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var mainModel: MainActivityViewModel
 
-    private val adapter by lazy { HomeFragmentAdapter(shizukuStatus) }
+    private inline val checkShizukuPermission: () -> Unit get() = { mainModel.checkShizukuPermission() }
+    private inline val shizukuStatus get() = mainModel.shizukuStatus.asLiveData()
+    private val adapter by lazy { HomeFragmentAdapter(this, checkShizukuPermission) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mainModel = ViewModelProvider(requireActivity())[MainActivityViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +38,9 @@ class HomeFragment(private val shizukuStatus: LiveData<ShizukuStatus?>) : Fragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        shizukuStatus.observe(viewLifecycleOwner) {
+            adapter.updateData(it)
+        }
         adapter.updateData(shizukuStatus.value)
 
         val recyclerView = binding.list

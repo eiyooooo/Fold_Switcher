@@ -1,45 +1,45 @@
 package com.eiyooooo.foldswitcher.views
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.eiyooooo.foldswitcher.R
 import com.eiyooooo.foldswitcher.databinding.HomeItemContainerBinding
-import com.eiyooooo.foldswitcher.databinding.ItemRequestShizukuBinding
+import com.eiyooooo.foldswitcher.databinding.ItemShizukuStatusBinding
 import com.eiyooooo.foldswitcher.types.ShizukuStatus
 import rikka.recyclerview.BaseViewHolder
 import rikka.recyclerview.BaseViewHolder.Creator
 
-class ShizukuStatusViewHolder(private val binding: ItemRequestShizukuBinding, root: View) : BaseViewHolder<ShizukuStatus>(root) {
-
+class ShizukuStatusViewHolder(private val binding: ItemShizukuStatusBinding, root: View) : BaseViewHolder<ShizukuStatus>(root) {
     companion object {
-        val TAG: String = ShizukuStatusViewHolder::class.java.simpleName
-
         val CREATOR = Creator<ShizukuStatus> { inflater: LayoutInflater, parent: ViewGroup? ->
             val outer = HomeItemContainerBinding.inflate(inflater, parent, false)
-            val inner = ItemRequestShizukuBinding.inflate(inflater, outer.root, true)
+            val inner = ItemShizukuStatusBinding.inflate(inflater, outer.root, true)
             ShizukuStatusViewHolder(inner, outer.root)
         }
     }
 
-    private inline val buttonSetupInstruction get() = binding.buttonSetupInstruction
-    private inline val buttonRequestPermission get() = binding.buttonRequestPermission
+    private inline val explanation get() = binding.ShizukuExplanation
+    private inline val warning get() = binding.ShizukuWarning
 
     override fun onBind() {
         val status = data
 
-        if (status == ShizukuStatus.SHIZUKU_NOT_RUNNING) {
-            buttonRequestPermission.isClickable = false
-        }
+        when (status) {
+            ShizukuStatus.HAVE_PERMISSION -> {
+                warning.visibility = View.GONE
+                explanation.setText(R.string.Shizuku_connected)
+            }
 
-        //TODO: migrate to init
-        buttonSetupInstruction.setOnClickListener {
-            Log.d(TAG, "buttonSetupInstruction onClick")
-            //TODO
-        }
-        buttonRequestPermission.setOnClickListener {
-            Log.d(TAG, "buttonRequestPermission onClick")
-            //TODO
+            ShizukuStatus.VERSION_NOT_SUPPORT -> {
+                warning.visibility = View.VISIBLE
+                explanation.setText(R.string.Shizuku_need_update)
+            }
+
+            else -> {
+                warning.visibility = View.VISIBLE
+                explanation.setText(R.string.Shizuku_explanation)
+            }
         }
     }
 }

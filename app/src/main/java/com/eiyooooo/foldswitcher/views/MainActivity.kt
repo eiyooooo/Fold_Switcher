@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val mainModel by viewModels<MainActivityViewModel>()
-    private val adapter by lazy { MainViewPagerAdapter(this, mainModel) }
+    private val adapter by lazy { MainViewPagerAdapter(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -4,6 +4,7 @@ import android.content.pm.PackageManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eiyooooo.foldswitcher.types.ShizukuStatus
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -42,7 +43,7 @@ class MainActivityViewModel : ViewModel() {
     }
 
     fun checkShizukuPermission() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (!Shizuku.pingBinder()) {
                 _shizukuStatus.value = ShizukuStatus.SHIZUKU_NOT_RUNNING
                 return@launch
