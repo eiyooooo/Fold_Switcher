@@ -1,5 +1,0 @@
-<resources>
-    <dimen name="rd_activity_horizontal_margin">12dp</dimen>
-
-    <dimen name="home_padding">6dp</dimen>
-</resources>
