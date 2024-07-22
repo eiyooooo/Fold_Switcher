@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
         mainModel.shizukuStatus.observe(this) {
             adapter.updateData(it)
