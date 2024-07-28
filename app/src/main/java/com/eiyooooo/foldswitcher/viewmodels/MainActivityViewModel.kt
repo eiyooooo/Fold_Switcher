@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.eiyooooo.foldswitcher.types.ShizukuStatus
+import com.eiyooooo.foldswitcher.wrappers.ShizukuExecutor
+import com.eiyooooo.foldswitcher.wrappers.UserExecutor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -18,6 +20,9 @@ class MainActivityViewModel : ViewModel() {
     companion object {
         private var checkShizukuPermissionJob: Job? = null
     }
+
+    val useShizukuExecutor = !UserExecutor.checkAvailability()
+    val executor = lazy { if (useShizukuExecutor) ShizukuExecutor else UserExecutor }
 
     private val _shizukuStatus: MutableStateFlow<ShizukuStatus?> by lazy { MutableStateFlow(null) }
     val shizukuStatus: LiveData<ShizukuStatus?> = _shizukuStatus.asLiveData()
