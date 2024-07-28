@@ -14,5 +14,7 @@
     <string name="Shizuku_warning">After granting Shizuku permissions, the software will have more privileges than ordinary applications. Please be aware of your device\'s security.</string>
     <string name="Shizuku_need_update">Shizuku version is outdated. Please update.</string>
 
+    <string name="State_reset">Reset fold state</string>
+
     <string name="no_browser">No default browser</string>
 </resources>

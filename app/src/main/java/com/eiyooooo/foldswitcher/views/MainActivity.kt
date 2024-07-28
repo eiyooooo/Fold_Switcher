@@ -15,8 +15,8 @@ import rikka.recyclerview.fixEdgeEffect
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private val mainModel by viewModels<MainActivityViewModel>()
-    private val adapter by lazy { MainViewPagerAdapter(mainModel) }
+    private val mainModel: MainActivityViewModel by viewModels()
+    private val adapter by lazy { MainViewPagerAdapter(this, mainModel) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,10 +25,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        mainModel.shizukuStatus.observe(this) {
-            adapter.updateData(it)
+        if (mainModel.useShizukuExecutor) {
+            mainModel.shizukuStatus.observe(this) {
+                adapter.updateData(it)
+            }
+            adapter.updateData(mainModel.shizukuStatus.value)
+        } else {
+            adapter.updateData()
         }
-        adapter.updateData(mainModel.shizukuStatus.value)
+
+        mainModel.executor.value.currentState.observe(this) {
+            if (mainModel.useShizukuExecutor) adapter.updateData(mainModel.shizukuStatus.value)
+            else adapter.updateData()
+        }
 
         val recyclerView = binding.contentMain.list
         recyclerView.adapter = adapter
@@ -36,16 +45,16 @@ class MainActivity : AppCompatActivity() {
         recyclerView.addItemSpacing(top = 4f, bottom = 4f, unit = TypedValue.COMPLEX_UNIT_DIP)
         recyclerView.addEdgeSpacing(top = 4f, bottom = 4f, left = 16f, right = 16f, unit = TypedValue.COMPLEX_UNIT_DIP)
 
-        mainModel.addShizukuListener()
+        if (mainModel.useShizukuExecutor) mainModel.addShizukuListener()
     }
 
     override fun onResume() {
         super.onResume()
-        mainModel.checkShizukuPermission()
+        if (mainModel.useShizukuExecutor) mainModel.checkShizukuPermission()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mainModel.removeShizukuListener()
+        if (mainModel.useShizukuExecutor) mainModel.removeShizukuListener()
     }
 }
