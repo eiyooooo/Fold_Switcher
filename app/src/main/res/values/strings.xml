@@ -17,6 +17,7 @@
     <string name="state_reset">Reset fold state</string>
 
     <string name="instruction">Click on the retrieved status below to switch</string>
+    <string name="github">If you find it useful\nClick here to jump to GitHub and give me a star</string>
 
     <string name="no_browser">No default browser</string>
 </resources>

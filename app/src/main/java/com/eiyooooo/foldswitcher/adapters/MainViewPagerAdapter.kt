@@ -6,6 +6,7 @@ import com.eiyooooo.foldswitcher.types.FoldStatusData
 import com.eiyooooo.foldswitcher.types.ShizukuStatus
 import com.eiyooooo.foldswitcher.viewmodels.MainActivityViewModel
 import com.eiyooooo.foldswitcher.views.FoldStatusViewHolder
+import com.eiyooooo.foldswitcher.views.GitHubViewHolder
 import com.eiyooooo.foldswitcher.views.InstructionViewHolder
 import com.eiyooooo.foldswitcher.views.MainActivity
 import com.eiyooooo.foldswitcher.views.ShizukuInstructionViewHolder
@@ -19,8 +20,9 @@ class MainViewPagerAdapter(private val mainActivity: MainActivity, private val m
         private const val ID_SHIZUKU_STATUS = 0L
         private const val ID_SHIZUKU_INSTRUCTION = 1L
         private const val ID_SHIZUKU_REQUEST = 2L
-        private const val ID_INSTRUCTION = 3L
-        private const val ID_RESET_STATE = 4L
+        private const val ID_GITHUB = 3L
+        private const val ID_INSTRUCTION = 4L
+        private const val ID_RESET_STATE = 5L
         private val idList = mutableListOf<Pair<Int, Long>>()
     }
 
@@ -39,16 +41,20 @@ class MainViewPagerAdapter(private val mainActivity: MainActivity, private val m
 
         addItem(ShizukuStatusViewHolder.CREATOR, shizukuStatus, ID_SHIZUKU_STATUS)
 
-        if (shizukuStatus == ShizukuStatus.HAVE_PERMISSION) {
-            mainModel.executor.value.setStatus(true)
-            addStates()
-        } else {
+        if (shizukuStatus != ShizukuStatus.HAVE_PERMISSION) {
             mainModel.executor.value.setStatus(false)
             addItem(ShizukuInstructionViewHolder.CREATOR, null, ID_SHIZUKU_INSTRUCTION)
             if (shizukuStatus != ShizukuStatus.SHIZUKU_NOT_RUNNING) {
                 addItem(ShizukuRequestViewHolder.CREATOR, null, ID_SHIZUKU_REQUEST)
                 mainModel.startCheckingShizukuPermission()
             }
+        }
+
+        addItem(GitHubViewHolder.CREATOR, null, ID_GITHUB)
+
+        if (shizukuStatus == ShizukuStatus.HAVE_PERMISSION) {
+            mainModel.executor.value.setStatus(true)
+            addStates()
         }
 
         notifyDataSetChanged()
@@ -59,6 +65,8 @@ class MainViewPagerAdapter(private val mainActivity: MainActivity, private val m
         mainModel.stopCheckingShizukuPermission()
         clear()
 
+        addItem(GitHubViewHolder.CREATOR, null, ID_GITHUB)
+
         addStates()
 
         notifyDataSetChanged()
@@ -67,7 +75,7 @@ class MainViewPagerAdapter(private val mainActivity: MainActivity, private val m
     private fun addStates() {
         addItem(InstructionViewHolder.CREATOR, null, ID_INSTRUCTION)
         addItem(FoldStatusViewHolder.CREATOR, FoldStatusData(mainModel, -1, mainActivity.getString(R.string.state_reset)), ID_RESET_STATE)
-        var id = 5L
+        var id = 6L
         mainModel.executor.value.supportStates.forEach { pair ->
             val name = pair.second.ifEmpty { pair.first.toString() }
             addItem(FoldStatusViewHolder.CREATOR, FoldStatusData(mainModel, pair.first, name), id)
