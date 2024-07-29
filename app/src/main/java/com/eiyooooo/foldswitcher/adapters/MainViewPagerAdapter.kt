@@ -6,6 +6,7 @@ import com.eiyooooo.foldswitcher.types.FoldStatusData
 import com.eiyooooo.foldswitcher.types.ShizukuStatus
 import com.eiyooooo.foldswitcher.viewmodels.MainActivityViewModel
 import com.eiyooooo.foldswitcher.views.FoldStatusViewHolder
+import com.eiyooooo.foldswitcher.views.InstructionViewHolder
 import com.eiyooooo.foldswitcher.views.MainActivity
 import com.eiyooooo.foldswitcher.views.ShizukuInstructionViewHolder
 import com.eiyooooo.foldswitcher.views.ShizukuRequestViewHolder
@@ -18,7 +19,8 @@ class MainViewPagerAdapter(private val mainActivity: MainActivity, private val m
         private const val ID_SHIZUKU_STATUS = 0L
         private const val ID_SHIZUKU_INSTRUCTION = 1L
         private const val ID_SHIZUKU_REQUEST = 2L
-        private const val ID_RESET_STATE = 3L
+        private const val ID_INSTRUCTION = 3L
+        private const val ID_RESET_STATE = 4L
         private val idList = mutableListOf<Pair<Int, Long>>()
     }
 
@@ -63,8 +65,9 @@ class MainViewPagerAdapter(private val mainActivity: MainActivity, private val m
     }
 
     private fun addStates() {
+        addItem(InstructionViewHolder.CREATOR, null, ID_INSTRUCTION)
         addItem(FoldStatusViewHolder.CREATOR, FoldStatusData(mainModel, -1, mainActivity.getString(R.string.state_reset)), ID_RESET_STATE)
-        var id = 4L
+        var id = 5L
         mainModel.executor.value.supportStates.forEach { pair ->
             val name = pair.second.ifEmpty { pair.first.toString() }
             addItem(FoldStatusViewHolder.CREATOR, FoldStatusData(mainModel, pair.first, name), id)

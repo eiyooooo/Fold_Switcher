@@ -16,5 +16,7 @@
 
     <string name="state_reset">重置折叠状态</string>
 
+    <string name="instruction">点击下方获取到的状态进行切换</string>
+
     <string name="no_browser">没有默认浏览器</string>
 </resources>

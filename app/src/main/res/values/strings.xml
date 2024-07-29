@@ -16,5 +16,7 @@
 
     <string name="state_reset">Reset fold state</string>
 
+    <string name="instruction">Click on the retrieved status below to switch</string>
+
     <string name="no_browser">No default browser</string>
 </resources>
