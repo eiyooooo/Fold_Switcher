@@ -14,7 +14,7 @@
     <string name="Shizuku_warning">授予Shizuku权限后软件将获得超过普通应用的权限，请注意自身设备的安全。</string>
     <string name="Shizuku_need_update">Shizuku版本低，请更新</string>
 
-    <string name="State_reset">重置折叠状态</string>
+    <string name="state_reset">重置折叠状态</string>
 
     <string name="no_browser">没有默认浏览器</string>
 </resources>
