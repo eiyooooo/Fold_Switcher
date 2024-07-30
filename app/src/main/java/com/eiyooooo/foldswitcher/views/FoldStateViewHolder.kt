@@ -5,17 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.eiyooooo.foldswitcher.R
 import com.eiyooooo.foldswitcher.databinding.HomeItemContainerBinding
-import com.eiyooooo.foldswitcher.databinding.ItemFoldStatusBinding
-import com.eiyooooo.foldswitcher.types.FoldStatusData
+import com.eiyooooo.foldswitcher.databinding.ItemFoldStateBinding
+import com.eiyooooo.foldswitcher.types.FoldStateData
 import rikka.recyclerview.BaseViewHolder
 import rikka.recyclerview.BaseViewHolder.Creator
 
-class FoldStatusViewHolder(private val binding: ItemFoldStatusBinding, root: View) : BaseViewHolder<FoldStatusData>(root), View.OnClickListener {
+class FoldStateViewHolder(private val binding: ItemFoldStateBinding, root: View) : BaseViewHolder<FoldStateData>(root), View.OnClickListener {
     companion object {
         val CREATOR = Creator<Any> { inflater: LayoutInflater, parent: ViewGroup? ->
             val outer = HomeItemContainerBinding.inflate(inflater, parent, false)
-            val inner = ItemFoldStatusBinding.inflate(inflater, outer.root, true)
-            FoldStatusViewHolder(inner, outer.root)
+            val inner = ItemFoldStateBinding.inflate(inflater, outer.root, true)
+            FoldStateViewHolder(inner, outer.root)
         }
     }
 

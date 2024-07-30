@@ -2,10 +2,10 @@ package com.eiyooooo.foldswitcher.adapters
 
 import android.annotation.SuppressLint
 import com.eiyooooo.foldswitcher.R
-import com.eiyooooo.foldswitcher.types.FoldStatusData
+import com.eiyooooo.foldswitcher.types.FoldStateData
 import com.eiyooooo.foldswitcher.types.ShizukuStatus
 import com.eiyooooo.foldswitcher.viewmodels.MainActivityViewModel
-import com.eiyooooo.foldswitcher.views.FoldStatusViewHolder
+import com.eiyooooo.foldswitcher.views.FoldStateViewHolder
 import com.eiyooooo.foldswitcher.views.GitHubViewHolder
 import com.eiyooooo.foldswitcher.views.InstructionViewHolder
 import com.eiyooooo.foldswitcher.views.LicensesViewHolder
@@ -78,11 +78,11 @@ class MainViewPagerAdapter(private val mainActivity: MainActivity, private val m
 
     private fun addStates() {
         addItem(InstructionViewHolder.CREATOR, null, ID_INSTRUCTION)
-        addItem(FoldStatusViewHolder.CREATOR, FoldStatusData(mainModel, -1, mainActivity.getString(R.string.state_reset)), ID_RESET_STATE)
+        addItem(FoldStateViewHolder.CREATOR, FoldStateData(mainModel, -1, mainActivity.getString(R.string.state_reset)), ID_RESET_STATE)
         var id = 7L
         mainModel.executor.value.supportStates.forEach { pair ->
             val name = pair.second.ifEmpty { pair.first.toString() }
-            addItem(FoldStatusViewHolder.CREATOR, FoldStatusData(mainModel, pair.first, name), id)
+            addItem(FoldStateViewHolder.CREATOR, FoldStateData(mainModel, pair.first, name), id)
             idList.add(pair.first to id)
             id++
         }
