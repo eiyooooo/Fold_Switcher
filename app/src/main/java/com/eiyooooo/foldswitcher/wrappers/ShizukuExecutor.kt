@@ -75,6 +75,21 @@ object ShizukuExecutor : Executor {
         return true
     }
 
+    override fun getCurrentStateOnce(): Int {
+        if (checkAvailability()) {
+            try {
+                if (status == 2) {
+                    return executeShellCommand("cmd device_state print-state").trim().toInt()
+                } else if (status == 3) {
+                    return DeviceStateManager.getInstance(true).deviceStateInfo.currentState
+                }
+            } catch (e: Exception) {
+                return -1
+            }
+        }
+        return -1
+    }
+
     override fun requestState(state: Int): Boolean {
         if (checkAvailability()) {
             if (status == 2) {

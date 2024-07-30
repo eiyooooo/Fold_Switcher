@@ -43,6 +43,17 @@ object UserExecutor : Executor {
         return availability
     }
 
+    override fun getCurrentStateOnce(): Int {
+        if (checkAvailability()) {
+            return try {
+                executeShellCommand("cmd device_state print-state").trim().toInt()
+            } catch (e: Exception) {
+                -1
+            }
+        }
+        return -1
+    }
+
     override fun requestState(state: Int): Boolean {
         if (checkAvailability()) {
             return !executeShellCommand("cmd device_state state $state").contains("Error")

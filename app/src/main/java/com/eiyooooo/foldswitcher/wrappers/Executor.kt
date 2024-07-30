@@ -11,6 +11,8 @@ interface Executor {
 
     fun checkAvailability(): Boolean
 
+    fun getCurrentStateOnce(): Int
+
     fun requestState(state: Int): Boolean
 
     fun resetState(): Boolean
