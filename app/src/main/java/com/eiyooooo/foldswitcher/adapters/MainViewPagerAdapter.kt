@@ -7,6 +7,7 @@ import com.eiyooooo.foldswitcher.types.ShizukuStatus
 import com.eiyooooo.foldswitcher.viewmodels.MainActivityViewModel
 import com.eiyooooo.foldswitcher.views.FoldStateViewHolder
 import com.eiyooooo.foldswitcher.views.GitHubViewHolder
+import com.eiyooooo.foldswitcher.views.InstructionQuickSwitchViewHolder
 import com.eiyooooo.foldswitcher.views.InstructionViewHolder
 import com.eiyooooo.foldswitcher.views.LicensesViewHolder
 import com.eiyooooo.foldswitcher.views.MainActivity
@@ -24,7 +25,8 @@ class MainViewPagerAdapter(private val mainActivity: MainActivity, private val m
         private const val ID_GITHUB = 3L
         private const val ID_LICENSES = 4L
         private const val ID_INSTRUCTION = 5L
-        private const val ID_RESET_STATE = 6L
+        private const val ID_INSTRUCTION_QUICK_SWITCH = 6L
+        private const val ID_RESET_STATE = 7L
         private val idList = mutableListOf<Pair<Int, Long>>()
     }
 
@@ -78,11 +80,12 @@ class MainViewPagerAdapter(private val mainActivity: MainActivity, private val m
 
     private fun addStates() {
         addItem(InstructionViewHolder.CREATOR, null, ID_INSTRUCTION)
-        addItem(FoldStateViewHolder.CREATOR, FoldStateData(mainModel, -1, mainActivity.getString(R.string.state_reset)), ID_RESET_STATE)
-        var id = 7L
+        addItem(InstructionQuickSwitchViewHolder.CREATOR, null, ID_INSTRUCTION_QUICK_SWITCH)
+        addItem(FoldStateViewHolder.CREATOR, FoldStateData(this, mainModel, -1, mainActivity.getString(R.string.state_reset)), ID_RESET_STATE)
+        var id = 8L
         mainModel.executor.value.supportStates.forEach { pair ->
             val name = pair.second.ifEmpty { pair.first.toString() }
-            addItem(FoldStateViewHolder.CREATOR, FoldStateData(mainModel, pair.first, name), id)
+            addItem(FoldStateViewHolder.CREATOR, FoldStateData(this, mainModel, pair.first, name), id)
             idList.add(pair.first to id)
             id++
         }

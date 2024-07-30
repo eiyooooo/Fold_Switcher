@@ -17,8 +17,11 @@
     <string name="state_reset">Reset fold state</string>
 
     <string name="instruction">Click on the retrieved status below to switch</string>
+    <string name="instruction_no_quick_switch">No quick switch available, long press the retrieved status below to add</string>
+    <string name="instruction_current_quick_switch">Current quick switch: %s, click me to delete</string>
     <string name="github">If you find it useful\nClick here to jump to GitHub and give me a star</string>
     <string name="licenses">Licenses</string>
 
     <string name="no_browser">No default browser</string>
+    <string name="no_quick_switch">No quick switch</string>
 </resources>
