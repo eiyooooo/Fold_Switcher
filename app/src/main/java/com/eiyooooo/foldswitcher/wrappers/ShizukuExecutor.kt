@@ -75,24 +75,36 @@ object ShizukuExecutor : Executor {
         return true
     }
 
-    override fun requestState(state: Int) {
+    override fun requestState(state: Int): Boolean {
         if (checkAvailability()) {
             if (status == 2) {
-                executeShellCommand("cmd device_state state $state")
+                return !executeShellCommand("cmd device_state state $state").contains("Error")
             } else if (status == 3) {
-                DeviceStateManager.getInstance(true).requestState(state, 0)
+                try {
+                    DeviceStateManager.getInstance(true).requestState(state, 0)
+                    return true
+                } catch (e: Exception) {
+                    return false
+                }
             }
         }
+        return false
     }
 
-    override fun resetState() {
+    override fun resetState(): Boolean {
         if (checkAvailability()) {
             if (status == 2) {
-                executeShellCommand("cmd device_state state reset")
+                return !executeShellCommand("cmd device_state state reset").contains("Error")
             } else if (status == 3) {
-                DeviceStateManager.getInstance(true).cancelStateRequest()
+                try {
+                    DeviceStateManager.getInstance(true).cancelStateRequest()
+                    return true
+                } catch (e: Exception) {
+                    return false
+                }
             }
         }
+        return false
     }
 
     override fun parseDeviceStates(input: String): List<Pair<Int, String>> {

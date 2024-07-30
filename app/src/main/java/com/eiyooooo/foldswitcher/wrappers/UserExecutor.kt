@@ -43,16 +43,18 @@ object UserExecutor : Executor {
         return availability
     }
 
-    override fun requestState(state: Int) {
+    override fun requestState(state: Int): Boolean {
         if (checkAvailability()) {
-            executeShellCommand("cmd device_state state $state")
+            return !executeShellCommand("cmd device_state state $state").contains("Error")
         }
+        return false
     }
 
-    override fun resetState() {
+    override fun resetState(): Boolean {
         if (checkAvailability()) {
-            executeShellCommand("cmd device_state state reset")
+            return !executeShellCommand("cmd device_state state reset").contains("Error")
         }
+        return false
     }
 
     override fun parseDeviceStates(input: String): List<Pair<Int, String>> {

@@ -11,9 +11,9 @@ interface Executor {
 
     fun checkAvailability(): Boolean
 
-    fun requestState(state: Int)
+    fun requestState(state: Int): Boolean
 
-    fun resetState()
+    fun resetState(): Boolean
 
     fun parseDeviceStates(input: String): List<Pair<Int, String>>
 
