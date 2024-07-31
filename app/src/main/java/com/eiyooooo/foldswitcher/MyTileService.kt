@@ -9,83 +9,52 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.eiyooooo.foldswitcher.helpers.SharedPreferencesHelper
 import com.eiyooooo.foldswitcher.views.MainActivity
+import com.eiyooooo.foldswitcher.wrappers.Executor
 import com.eiyooooo.foldswitcher.wrappers.ShizukuExecutor
 import com.eiyooooo.foldswitcher.wrappers.UserExecutor
 import rikka.shizuku.Shizuku
 
 class MyTileService : TileService() {
+    private val quickSwitchName get() = SharedPreferencesHelper.getString("quickSwitchName", "")
+    private val quickSwitchState get() = SharedPreferencesHelper.getInt("quickSwitchState", -1)
+
     override fun onStartListening() {
         super.onStartListening()
         val tile = qsTile
         tile.state = Tile.STATE_INACTIVE
-
-        if (UserExecutor.checkAvailability()) {
-            val currentState = UserExecutor.getCurrentStateOnce()
-            if (currentState != -1 && SharedPreferencesHelper.getInt("quickSwitchState", -1) == currentState) {
+        runWithExecutor {
+            val currentState = it.getCurrentStateOnce()
+            if (currentState != -1 && quickSwitchState == currentState) {
                 tile.state = Tile.STATE_ACTIVE
             }
-        } else {
-            if (checkShizukuPermission()) {
-                ShizukuExecutor.setStatus(true)
-                val currentState = ShizukuExecutor.getCurrentStateOnce()
-                if (currentState != -1 && SharedPreferencesHelper.getInt("quickSwitchState", -1) == currentState) {
-                    tile.state = Tile.STATE_ACTIVE
-                }
-            } else {
-                startMainActivity()
-            }
         }
-
-        tile.label = SharedPreferencesHelper.getString("quickSwitchName").ifEmpty { getString(R.string.no_quick_switch) }
+        tile.label = quickSwitchName.ifEmpty { getString(R.string.no_quick_switch) }
         tile.updateTile()
     }
 
     override fun onClick() {
         super.onClick()
         val tile = qsTile
-        val state = SharedPreferencesHelper.getInt("quickSwitchState", -1)
+        val state = quickSwitchState
         if (tile.state == Tile.STATE_INACTIVE) {
             if (state != -1) {
-                if (UserExecutor.checkAvailability()) {
-                    if (UserExecutor.requestState(state)) {
+                runWithExecutor {
+                    if (it.requestState(state)) {
                         tile.state = Tile.STATE_ACTIVE
-                    }
-                } else {
-                    if (checkShizukuPermission()) {
-                        ShizukuExecutor.setStatus(true)
-                        if (ShizukuExecutor.requestState(state)) {
-                            tile.state = Tile.STATE_ACTIVE
-                        }
-                    } else {
-                        startMainActivity()
                     }
                 }
             } else {
                 startMainActivity()
             }
         } else if (tile.state == Tile.STATE_ACTIVE) {
-            if (UserExecutor.checkAvailability()) {
-                if (UserExecutor.resetState()) {
-                    val currentState = UserExecutor.getCurrentStateOnce()
+            runWithExecutor {
+                if (it.resetState()) {
+                    val currentState = it.getCurrentStateOnce()
                     if (currentState != -1 && state == currentState) {
                         tile.state = Tile.STATE_ACTIVE
                     } else {
                         tile.state = Tile.STATE_INACTIVE
                     }
-                }
-            } else {
-                if (checkShizukuPermission()) {
-                    ShizukuExecutor.setStatus(true)
-                    if (ShizukuExecutor.resetState()) {
-                        val currentState = ShizukuExecutor.getCurrentStateOnce()
-                        if (currentState != -1 && state == currentState) {
-                            tile.state = Tile.STATE_ACTIVE
-                        } else {
-                            tile.state = Tile.STATE_INACTIVE
-                        }
-                    }
-                } else {
-                    startMainActivity()
                 }
             }
         }
@@ -106,13 +75,16 @@ class MyTileService : TileService() {
         }
     }
 
-    private fun checkShizukuPermission(): Boolean {
-        if (!Shizuku.pingBinder()) {
-            return false
+    private fun runWithExecutor(function: (Executor) -> Unit) {
+        if (UserExecutor.checkAvailability()) {
+            function(UserExecutor)
+        } else {
+            if (Shizuku.pingBinder() && !Shizuku.isPreV11() && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
+                ShizukuExecutor.setStatus(true)
+                function(ShizukuExecutor)
+            } else {
+                startMainActivity()
+            }
         }
-        if (Shizuku.isPreV11()) {
-            return false
-        }
-        return Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
     }
 }
