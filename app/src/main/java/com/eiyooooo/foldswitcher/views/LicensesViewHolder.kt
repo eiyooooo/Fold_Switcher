@@ -1,12 +1,9 @@
 package com.eiyooooo.foldswitcher.views
 
 import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.eiyooooo.foldswitcher.R
 import com.eiyooooo.foldswitcher.databinding.HomeItemContainerBinding
 import com.eiyooooo.foldswitcher.databinding.ItemLicensesBinding
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity

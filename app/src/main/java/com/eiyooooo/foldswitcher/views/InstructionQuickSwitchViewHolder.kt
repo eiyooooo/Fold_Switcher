@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.eiyooooo.foldswitcher.R
-import com.eiyooooo.foldswitcher.helpers.SharedPreferencesHelper
 import com.eiyooooo.foldswitcher.databinding.HomeItemContainerBinding
 import com.eiyooooo.foldswitcher.databinding.ItemInstructionQuickSwitchBinding
+import com.eiyooooo.foldswitcher.helpers.SharedPreferencesHelper
 import rikka.recyclerview.BaseViewHolder
 import rikka.recyclerview.BaseViewHolder.Creator
 
