@@ -1,6 +1,7 @@
 package com.eiyooooo.foldswitcher.adapters
 
 import android.annotation.SuppressLint
+import android.app.StatusBarManager
 import com.eiyooooo.foldswitcher.R
 import com.eiyooooo.foldswitcher.types.FoldStateData
 import com.eiyooooo.foldswitcher.types.ShizukuStatus
@@ -29,6 +30,8 @@ class MainViewPagerAdapter(private val mainActivity: MainActivity, private val m
         private const val ID_RESET_STATE = 7L
         private val idList = mutableListOf<Pair<Int, Long>>()
     }
+
+    val statusBarManager: StatusBarManager = mainActivity.getSystemService(StatusBarManager::class.java)
 
     init {
         setHasStableIds(true)

@@ -1,12 +1,16 @@
 package com.eiyooooo.foldswitcher.views
 
+import android.content.ComponentName
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.eiyooooo.foldswitcher.MyTileService
 import com.eiyooooo.foldswitcher.R
-import com.eiyooooo.foldswitcher.helpers.SharedPreferencesHelper
 import com.eiyooooo.foldswitcher.databinding.HomeItemContainerBinding
 import com.eiyooooo.foldswitcher.databinding.ItemFoldStateBinding
+import com.eiyooooo.foldswitcher.helpers.SharedPreferencesHelper
 import com.eiyooooo.foldswitcher.types.FoldStateData
 import rikka.recyclerview.BaseViewHolder
 import rikka.recyclerview.BaseViewHolder.Creator
@@ -42,6 +46,13 @@ class FoldStateViewHolder(private val binding: ItemFoldStateBinding, private val
                 data.adapter.updateData(data.viewModel.shizukuStatus.value)
             } else {
                 data.adapter.updateData()
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                data.adapter.statusBarManager.requestAddTileService(
+                    ComponentName(context, MyTileService::class.java),
+                    data.text,
+                    Icon.createWithResource(context, R.drawable.foldable_phone),
+                    { }, { })
             }
         }
         return true
