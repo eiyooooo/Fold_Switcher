@@ -20,7 +20,7 @@
     <string name="instruction_no_quick_switch">无快捷切换，长按下方获取到的状态进行设置</string>
     <string name="instruction_current_quick_switch">当前快捷切换：%s，点我删除</string>
     <string name="github">觉得有用的话，点此到GitHub给我点星星哦</string>
-    <string name="licenses">开源证书</string>
+    <string name="licenses">开源许可</string>
 
     <string name="no_browser">没有默认浏览器</string>
     <string name="no_quick_switch">无快捷切换</string>
