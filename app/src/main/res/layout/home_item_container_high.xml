@@ -8,7 +8,7 @@
     android:checkable="true"
     android:clickable="true"
     android:focusable="true"
-    app:cardBackgroundColor="@color/home_card_background_color"
+    app:cardBackgroundColor="@color/home_card_background_color_high"
     app:cardCornerRadius="28dp"
     app:cardElevation="0dp"
     tools:layout_height="100dp"

@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.eiyooooo.foldswitcher.MyTileService
 import com.eiyooooo.foldswitcher.R
-import com.eiyooooo.foldswitcher.databinding.HomeItemContainerBinding
+import com.eiyooooo.foldswitcher.databinding.HomeItemContainerHighBinding
 import com.eiyooooo.foldswitcher.databinding.ItemFoldStateBinding
 import com.eiyooooo.foldswitcher.helpers.SharedPreferencesHelper
 import com.eiyooooo.foldswitcher.types.FoldStateData
@@ -18,7 +18,7 @@ import rikka.recyclerview.BaseViewHolder.Creator
 class FoldStateViewHolder(private val binding: ItemFoldStateBinding, private val root: View) : BaseViewHolder<FoldStateData>(root), View.OnClickListener, View.OnLongClickListener {
     companion object {
         val CREATOR = Creator<Any> { inflater: LayoutInflater, parent: ViewGroup? ->
-            val outer = HomeItemContainerBinding.inflate(inflater, parent, false)
+            val outer = HomeItemContainerHighBinding.inflate(inflater, parent, false)
             val inner = ItemFoldStateBinding.inflate(inflater, outer.root, true)
             FoldStateViewHolder(inner, outer.root)
         }
