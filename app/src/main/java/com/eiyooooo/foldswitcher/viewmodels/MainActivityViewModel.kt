@@ -22,7 +22,7 @@ class MainActivityViewModel : ViewModel() {
     }
 
     val useShizukuExecutor = !UserExecutor.checkAvailability()
-    val executor = lazy { if (useShizukuExecutor) ShizukuExecutor else UserExecutor }
+    val executor by lazy { if (useShizukuExecutor) ShizukuExecutor else UserExecutor }
 
     private val _shizukuStatus: MutableStateFlow<ShizukuStatus?> by lazy { MutableStateFlow(null) }
     val shizukuStatus: LiveData<ShizukuStatus?> = _shizukuStatus.asLiveData()

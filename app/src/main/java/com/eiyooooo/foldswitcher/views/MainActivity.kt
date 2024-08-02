@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             adapter.updateData()
         }
 
-        mainModel.executor.value.currentState.observe(this) {
+        mainModel.executor.currentState.observe(this) {
             if (mainModel.useShizukuExecutor) adapter.updateData(mainModel.shizukuStatus.value)
             else adapter.updateData()
         }
