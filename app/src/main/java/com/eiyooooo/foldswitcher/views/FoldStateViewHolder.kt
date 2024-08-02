@@ -28,7 +28,7 @@ class FoldStateViewHolder(private val binding: ItemFoldStateBinding, private val
         root.setOnClickListener(this)
     }
 
-    private val showName: String by lazy { data?.adjustedNameId?.let { context.getString(it) } ?: data?.name ?: "" }
+    private val showName: String get() = data?.adjustedNameId?.let { context.getString(it) } ?: data?.name ?: ""
     private inline val textView get() = binding.root
 
     override fun onClick(v: View) {
