@@ -28,6 +28,7 @@ class FoldStateViewHolder(private val binding: ItemFoldStateBinding, private val
         root.setOnClickListener(this)
     }
 
+    private val showName: String by lazy { data?.adjustedNameId?.let { context.getString(it) } ?: data?.name ?: "" }
     private inline val textView get() = binding.root
 
     override fun onClick(v: View) {
@@ -40,7 +41,8 @@ class FoldStateViewHolder(private val binding: ItemFoldStateBinding, private val
 
     override fun onLongClick(v: View): Boolean {
         if (data.state != -1) {
-            SharedPreferencesHelper.saveString("quickSwitchName", data.text)
+            SharedPreferencesHelper.saveString("quickSwitchShowName", showName)
+            SharedPreferencesHelper.saveString("quickSwitchAdjustedName", data.adjustedName)
             SharedPreferencesHelper.saveInt("quickSwitchState", data.state)
             if (data.viewModel.useShizukuExecutor) {
                 data.adapter.updateData(data.viewModel.shizukuStatus.value)
@@ -50,8 +52,7 @@ class FoldStateViewHolder(private val binding: ItemFoldStateBinding, private val
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 data.adapter.statusBarManager.requestAddTileService(
                     ComponentName(context, MyTileService::class.java),
-                    data.text,
-                    Icon.createWithResource(context, R.drawable.foldable_phone),
+                    showName, Icon.createWithResource(context, data.iconId),
                     { }, { })
             }
         }
@@ -59,14 +60,14 @@ class FoldStateViewHolder(private val binding: ItemFoldStateBinding, private val
     }
 
     override fun onBind() {
-        textView.text = data.text
+        textView.text = showName
         if (data.state != -1) {
             root.setOnLongClickListener(this)
         }
         if (data.viewModel.executor.value.currentState.value == data.state) {
             textView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.check_circle, 0, 0, 0)
         } else {
-            textView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.phone, 0, 0, 0)
+            textView.setCompoundDrawablesRelativeWithIntrinsicBounds(data.iconId, 0, 0, 0)
         }
     }
 }

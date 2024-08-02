@@ -24,4 +24,12 @@
 
     <string name="no_browser">No default browser</string>
     <string name="no_quick_switch">No quick switch</string>
+
+    <string name="posture_closed">Closed</string>
+    <string name="posture_dual_display">Dual Display</string>
+    <string name="posture_flipped">Flipped</string>
+    <string name="posture_half_folded">Half-Open</string>
+    <string name="posture_open">Open</string>
+    <string name="posture_rear_display">Rear Display</string>
+    <string name="posture_tent">Tent</string>
 </resources>

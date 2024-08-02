@@ -24,4 +24,12 @@
 
     <string name="no_browser">没有默认浏览器</string>
     <string name="no_quick_switch">无快捷切换</string>
+
+    <string name="posture_closed">闭合模式</string>
+    <string name="posture_dual_display">双屏模式</string>
+    <string name="posture_flipped">翻转模式</string>
+    <string name="posture_half_folded">半开模式</string>
+    <string name="posture_open">展开模式</string>
+    <string name="posture_rear_display">后屏模式</string>
+    <string name="posture_tent">帐篷模式</string>
 </resources>

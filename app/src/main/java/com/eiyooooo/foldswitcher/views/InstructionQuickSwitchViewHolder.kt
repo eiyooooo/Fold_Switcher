@@ -7,6 +7,7 @@ import com.eiyooooo.foldswitcher.R
 import com.eiyooooo.foldswitcher.databinding.HomeItemContainerBinding
 import com.eiyooooo.foldswitcher.databinding.ItemInstructionQuickSwitchBinding
 import com.eiyooooo.foldswitcher.helpers.SharedPreferencesHelper
+import com.eiyooooo.foldswitcher.types.getAdjustedNameId
 import rikka.recyclerview.BaseViewHolder
 import rikka.recyclerview.BaseViewHolder.Creator
 
@@ -27,19 +28,23 @@ class InstructionQuickSwitchViewHolder(private val binding: ItemInstructionQuick
     private var state: Int = -1
 
     override fun onClick(v: View) {
-        SharedPreferencesHelper.saveString("quickSwitchName", "")
+        SharedPreferencesHelper.saveString("quickSwitchShowName", "")
+        SharedPreferencesHelper.saveString("quickSwitchAdjustedName", "")
         SharedPreferencesHelper.saveInt("quickSwitchState", -1)
         title.text = context.getString(R.string.instruction_no_quick_switch)
     }
 
     override fun onBind() {
-        val name = SharedPreferencesHelper.getString("quickSwitchName")
+        val name = SharedPreferencesHelper.getString("quickSwitchShowName", "")
+        val adjustedName = SharedPreferencesHelper.getString("quickSwitchAdjustedName", "")
         state = SharedPreferencesHelper.getInt("quickSwitchState", -1)
-        if (name.isEmpty() || state == -1) {
-            SharedPreferencesHelper.saveString("quickSwitchName", "")
+        if (name.isEmpty() || adjustedName.isEmpty() || state == -1) {
+            SharedPreferencesHelper.saveString("quickSwitchShowName", "")
+            SharedPreferencesHelper.saveString("quickSwitchAdjustedName", "")
             SharedPreferencesHelper.saveInt("quickSwitchState", -1)
         } else {
-            title.text = String.format(context.getString(R.string.instruction_current_quick_switch), name)
+            val showName = if (adjustedName.isNotEmpty()) getAdjustedNameId(adjustedName)?.let { context.getString(it) } ?: name else name
+            title.text = String.format(context.getString(R.string.instruction_current_quick_switch), showName)
         }
     }
 }

@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Icon
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.eiyooooo.foldswitcher.helpers.SharedPreferencesHelper
+import com.eiyooooo.foldswitcher.types.getIconId
 import com.eiyooooo.foldswitcher.views.MainActivity
 import com.eiyooooo.foldswitcher.wrappers.Executor
 import com.eiyooooo.foldswitcher.wrappers.ShizukuExecutor
@@ -15,7 +17,8 @@ import com.eiyooooo.foldswitcher.wrappers.UserExecutor
 import rikka.shizuku.Shizuku
 
 class MyTileService : TileService() {
-    private val quickSwitchName get() = SharedPreferencesHelper.getString("quickSwitchName", "")
+    private val quickSwitchShowName get() = SharedPreferencesHelper.getString("quickSwitchShowName", "")
+    private val quickSwitchAdjustedName get() = SharedPreferencesHelper.getString("quickSwitchAdjustedName", "")
     private val quickSwitchState get() = SharedPreferencesHelper.getInt("quickSwitchState", -1)
 
     override fun onStartListening() {
@@ -28,7 +31,10 @@ class MyTileService : TileService() {
                 tile.state = Tile.STATE_ACTIVE
             }
         }
-        tile.label = quickSwitchName.ifEmpty { getString(R.string.no_quick_switch) }
+        tile.label = quickSwitchShowName.ifEmpty { getString(R.string.no_quick_switch) }
+        quickSwitchAdjustedName.takeIf { it.isNotEmpty() }?.let {
+            tile.icon = Icon.createWithResource(this, getIconId(it))
+        }
         tile.updateTile()
     }
 
