@@ -32,9 +32,9 @@ class MyTileService : TileService() {
             }
         }
         tile.label = quickSwitchShowName.ifEmpty { getString(R.string.no_quick_switch) }
-        quickSwitchAdjustedName.takeIf { it.isNotEmpty() }?.let {
-            tile.icon = Icon.createWithResource(this, getIconId(it))
-        }
+        tile.icon = quickSwitchAdjustedName.takeIf { it.isNotEmpty() }?.let {
+            Icon.createWithResource(this, getIconId(it))
+        } ?: Icon.createWithResource(this, R.drawable.foldable_phone)
         tile.updateTile()
     }
 
