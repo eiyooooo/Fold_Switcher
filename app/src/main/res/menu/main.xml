@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/github"
+        android:icon="@drawable/github"
+        android:title="@string/github"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/licenses"
+        android:icon="@drawable/license"
+        android:title="@string/licenses"
+        app:showAsAction="ifRoom" />
+</menu>
