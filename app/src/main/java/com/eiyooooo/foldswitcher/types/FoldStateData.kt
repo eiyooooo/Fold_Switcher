@@ -28,7 +28,7 @@ data class FoldStateData(
         adjustedName.replace('_', ' ').uppercase()
     }
     val adjustedNameId: Int? by lazy { getAdjustedNameId(adjustedName) }
-    val iconId: Int by lazy { getIconId(adjustedName) }
+    val iconId: Int by lazy { getIconId(this) }
 }
 
 private fun String.replaceSuffix(old: String, new: String): String {
@@ -37,6 +37,11 @@ private fun String.replaceSuffix(old: String, new: String): String {
 
 internal fun getIconId(adjustedName: String): Int {
     return FOLDING_STATE_ICONS[adjustedName] ?: R.drawable.foldable_phone
+}
+
+internal fun getIconId(foldStateData: FoldStateData): Int {
+    return if (foldStateData.state == -1) R.drawable.reset
+    else FOLDING_STATE_ICONS[foldStateData.adjustedName] ?: R.drawable.foldable_phone
 }
 
 internal fun getAdjustedNameId(adjustedName: String): Int? {
