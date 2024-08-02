@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">折叠屏切换器</string>
 
-    <string name="Shizuku_icon">Shizuku图标</string>
     <string name="Shizuku_explanation">折叠屏切换器需要Shizuku来执行操作</string>
     <string name="Shizuku_connected">Shizuku已连接</string>
     <string name="Shizuku_setup_instruction">Shizuku配置说明</string>
