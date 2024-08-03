@@ -33,9 +33,9 @@ class FoldStateViewHolder(private val binding: ItemFoldStateBinding, private val
 
     override fun onClick(v: View) {
         if (data.state == -1) {
-            data.viewModel.executor.resetState()
+            data.viewModel.getExecutor().resetState()
         } else {
-            data.viewModel.executor.requestState(data.state)
+            data.viewModel.getExecutor().requestState(data.state)
         }
     }
 
@@ -64,7 +64,7 @@ class FoldStateViewHolder(private val binding: ItemFoldStateBinding, private val
         if (data.state != -1) {
             root.setOnLongClickListener(this)
         }
-        if (data.viewModel.executor.currentState.value == data.state) {
+        if (data.viewModel.getExecutor().currentState.value == data.state) {
             textView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.check_circle, 0, 0, 0)
         } else {
             textView.setCompoundDrawablesRelativeWithIntrinsicBounds(data.iconId, 0, 0, 0)

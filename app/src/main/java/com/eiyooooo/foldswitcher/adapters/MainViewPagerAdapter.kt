@@ -47,7 +47,7 @@ class MainViewPagerAdapter(private val mainActivity: MainActivity, private val m
         addItem(ShizukuStatusViewHolder.CREATOR, shizukuStatus, ID_SHIZUKU_STATUS)
 
         if (shizukuStatus != ShizukuStatus.HAVE_PERMISSION) {
-            mainModel.executor.setStatus(false)
+            mainModel.getExecutor().setStatus(false)
             addItem(ShizukuInstructionViewHolder.CREATOR, null, ID_SHIZUKU_INSTRUCTION)
             if (shizukuStatus != ShizukuStatus.SHIZUKU_NOT_RUNNING) {
                 addItem(ShizukuRequestViewHolder.CREATOR, null, ID_SHIZUKU_REQUEST)
@@ -58,7 +58,7 @@ class MainViewPagerAdapter(private val mainActivity: MainActivity, private val m
         addItem(LicensesViewHolder.CREATOR, null, ID_LICENSES)
 
         if (shizukuStatus == ShizukuStatus.HAVE_PERMISSION) {
-            mainModel.executor.setStatus(true)
+            mainModel.getExecutor().setStatus(true)
             addStates()
         }
 
@@ -82,7 +82,7 @@ class MainViewPagerAdapter(private val mainActivity: MainActivity, private val m
         addItem(InstructionQuickSwitchViewHolder.CREATOR, null, ID_INSTRUCTION_QUICK_SWITCH)
         addItem(FoldStateViewHolder.CREATOR, FoldStateData(this, mainModel, -1, mainActivity.getString(R.string.state_reset)), ID_RESET_STATE)
         var id = 7L
-        mainModel.executor.supportStates.forEach { pair ->
+        mainModel.getExecutor().supportStates.forEach { pair ->
             val name = pair.second.ifEmpty { pair.first.toString() }
             addItem(FoldStateViewHolder.CREATOR, FoldStateData(this, mainModel, pair.first, name), id)
             idList.add(pair.first to id)

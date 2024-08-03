@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.eiyooooo.foldswitcher.types.ShizukuStatus
+import com.eiyooooo.foldswitcher.wrappers.Executor
 import com.eiyooooo.foldswitcher.wrappers.ShizukuExecutor
 import com.eiyooooo.foldswitcher.wrappers.UserExecutor
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +23,12 @@ class MainActivityViewModel : ViewModel() {
     }
 
     val useShizukuExecutor = !UserExecutor.checkAvailability()
-    val executor by lazy { if (useShizukuExecutor) ShizukuExecutor else UserExecutor }
+    fun getExecutor(): Executor {
+        return when {
+            !useShizukuExecutor -> UserExecutor
+            else -> ShizukuExecutor
+        }
+    }
 
     private val _shizukuStatus: MutableStateFlow<ShizukuStatus?> by lazy { MutableStateFlow(null) }
     val shizukuStatus: LiveData<ShizukuStatus?> = _shizukuStatus.asLiveData()
