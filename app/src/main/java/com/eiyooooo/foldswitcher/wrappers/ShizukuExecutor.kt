@@ -6,54 +6,60 @@ import android.os.IBinder
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
+import com.eiyooooo.foldswitcher.types.ExecuteMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import rikka.shizuku.Shizuku
 import rikka.shizuku.ShizukuRemoteProcess
 
 object ShizukuExecutor : Executor {
-    /**
-     * 0: don't have Shizuku permission
-     *
-     * 1: have Shizuku permission
-     *
-     * 2: command mode
-     *
-     * 3: manager mode
-     */
-    private var status: Int = 0
+    private var supportMode: Int = ExecuteMode.MODE_UNKNOWN
+    private var mode: Int = ExecuteMode.MODE_UNKNOWN
 
     override lateinit var supportStates: List<Pair<Int, String>>
 
     private val _currentState: MutableStateFlow<Int?> by lazy { MutableStateFlow(null) }
     override val currentState: LiveData<Int?> = _currentState.asLiveData()
 
-    override fun setStatus(status: Boolean) {
-        if (status) {
-            if (this.status == 0) this.status = 1
-            checkAvailability()
-        } else {
-            this.status = 0
+    override fun getSupportMode(): Int {
+        checkAvailability()
+        return supportMode
+    }
+
+    override fun setMode(mode: Int) {
+        if (mode == ExecuteMode.MODE_UNKNOWN) {
+            this.mode = ExecuteMode.MODE_UNKNOWN
             availability = false
             DeviceStateManager.resetDeviceStateManager(true)
+        } else {
+            if (this.mode == ExecuteMode.MODE_UNKNOWN) {
+                this.mode = ExecuteMode.MODE_ANY
+                checkAvailability()
+                if (mode != ExecuteMode.MODE_ANY) {
+                    this.mode = mode
+                }
+            } else if (mode != ExecuteMode.MODE_ANY) {
+                this.mode = mode
+            }
         }
     }
 
     private var availability: Boolean = false
     override fun checkAvailability(): Boolean {
-        if (status == 0) return false
+        if (mode == ExecuteMode.MODE_UNKNOWN) return false
         if (availability) return true
 
         supportStates = parseDeviceStates(executeShellCommand("cmd device_state print-states"))
         try {
             if (supportStates.isEmpty()) {
-                status = 3
+                supportMode = ExecuteMode.MODE_3
                 supportStates = DeviceStateManager.getInstance(true).deviceStateInfo.supportedStates?.map { it to "" }?.toList()!!
             } else {
-                status = 2
+                supportMode = ExecuteMode.MODE_2
             }
             if (supportStates.isEmpty()) {
                 throw Exception("no supportStates")
             }
+            mode = supportMode
 
             DeviceStateManager.getInstance(true).registerCallback(object : IDeviceStateManagerCallback.Stub() {
                 override fun onDeviceStateInfoChanged(info: DeviceStateInfo) {
@@ -78,9 +84,9 @@ object ShizukuExecutor : Executor {
     override fun getCurrentStateOnce(): Int {
         if (checkAvailability()) {
             try {
-                if (status == 2) {
+                if (mode == ExecuteMode.MODE_2) {
                     return executeShellCommand("cmd device_state print-state").trim().toInt()
-                } else if (status == 3) {
+                } else if (mode == ExecuteMode.MODE_3) {
                     return DeviceStateManager.getInstance(true).deviceStateInfo.currentState
                 }
             } catch (e: Exception) {
@@ -92,9 +98,9 @@ object ShizukuExecutor : Executor {
 
     override fun requestState(state: Int): Boolean {
         if (checkAvailability()) {
-            if (status == 2) {
+            if (mode == ExecuteMode.MODE_2) {
                 return !executeShellCommand("cmd device_state state $state").contains("Error")
-            } else if (status == 3) {
+            } else if (mode == ExecuteMode.MODE_3) {
                 try {
                     DeviceStateManager.getInstance(true).requestState(state, 0)
                     return true
@@ -108,9 +114,9 @@ object ShizukuExecutor : Executor {
 
     override fun resetState(): Boolean {
         if (checkAvailability()) {
-            if (status == 2) {
+            if (mode == ExecuteMode.MODE_2) {
                 return !executeShellCommand("cmd device_state state reset").contains("Error")
-            } else if (status == 3) {
+            } else if (mode == ExecuteMode.MODE_3) {
                 try {
                     DeviceStateManager.getInstance(true).cancelStateRequest()
                     return true

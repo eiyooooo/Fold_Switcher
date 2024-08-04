@@ -13,7 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.eiyooooo.foldswitcher.R
 import com.eiyooooo.foldswitcher.adapters.MainViewPagerAdapter
 import com.eiyooooo.foldswitcher.databinding.ActivityMainBinding
+import com.eiyooooo.foldswitcher.types.ExecuteMode
 import com.eiyooooo.foldswitcher.viewmodels.MainActivityViewModel
+import com.eiyooooo.foldswitcher.wrappers.ShizukuExecutor
+import com.eiyooooo.foldswitcher.wrappers.UserExecutor
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import rikka.recyclerview.addEdgeSpacing
 import rikka.recyclerview.addItemSpacing
@@ -32,18 +35,25 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        if (mainModel.useShizukuExecutor) {
-            mainModel.shizukuStatus.observe(this) {
-                adapter.updateData(it)
+        mainModel.executeMode.observe(this) { executeMode ->
+            executeMode?.let {
+                if (it == ExecuteMode.MODE_UNKNOWN) mainModel.getExecutor()
+                else mainModel.getExecutor().setMode(it)
             }
             adapter.updateData(mainModel.shizukuStatus.value)
-        } else {
-            adapter.updateData()
         }
-
-        mainModel.getExecutor().currentState.observe(this) {
-            if (mainModel.useShizukuExecutor) adapter.updateData(mainModel.shizukuStatus.value)
-            else adapter.updateData()
+        mainModel.shizukuStatus.observe(this) {
+            adapter.updateData(it)
+        }
+        if (mainModel.userExecutorAvailability) {
+            UserExecutor.currentState.observe(this) {
+                adapter.updateData(mainModel.shizukuStatus.value)
+            }
+            ShizukuExecutor.currentState.observe(this) {}
+        } else {
+            ShizukuExecutor.currentState.observe(this) {
+                adapter.updateData(mainModel.shizukuStatus.value)
+            }
         }
 
         val recyclerView = binding.contentMain.list
@@ -52,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.addItemSpacing(top = 4f, bottom = 4f, unit = TypedValue.COMPLEX_UNIT_DIP)
         recyclerView.addEdgeSpacing(top = 4f, bottom = 4f, left = 16f, right = 16f, unit = TypedValue.COMPLEX_UNIT_DIP)
 
-        if (mainModel.useShizukuExecutor) mainModel.addShizukuListener()
+        mainModel.addShizukuListener()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -86,11 +96,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (mainModel.useShizukuExecutor) mainModel.checkShizukuPermission()
+        mainModel.checkShizukuPermission()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (mainModel.useShizukuExecutor) mainModel.removeShizukuListener()
+        mainModel.removeShizukuListener()
     }
 }

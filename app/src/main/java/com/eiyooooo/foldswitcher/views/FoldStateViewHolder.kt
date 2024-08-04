@@ -44,11 +44,7 @@ class FoldStateViewHolder(private val binding: ItemFoldStateBinding, private val
             SharedPreferencesHelper.saveString("quickSwitchShowName", showName)
             SharedPreferencesHelper.saveString("quickSwitchAdjustedName", data.adjustedName)
             SharedPreferencesHelper.saveInt("quickSwitchState", data.state)
-            if (data.viewModel.useShizukuExecutor) {
-                data.adapter.updateData(data.viewModel.shizukuStatus.value)
-            } else {
-                data.adapter.updateData()
-            }
+            data.adapter.updateData(data.viewModel.shizukuStatus.value)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 data.adapter.statusBarManager.requestAddTileService(
                     ComponentName(context, MyTileService::class.java),

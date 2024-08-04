@@ -9,6 +9,7 @@ import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.eiyooooo.foldswitcher.helpers.SharedPreferencesHelper
+import com.eiyooooo.foldswitcher.types.ExecuteMode
 import com.eiyooooo.foldswitcher.types.getIconId
 import com.eiyooooo.foldswitcher.views.MainActivity
 import com.eiyooooo.foldswitcher.wrappers.Executor
@@ -86,7 +87,7 @@ class MyTileService : TileService() {
             function(UserExecutor)
         } else {
             if (Shizuku.pingBinder() && !Shizuku.isPreV11() && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
-                ShizukuExecutor.setStatus(true)
+                ShizukuExecutor.setMode(ExecuteMode.MODE_ANY)
                 function(ShizukuExecutor)
             } else {
                 startMainActivity()

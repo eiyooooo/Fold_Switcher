@@ -7,7 +7,9 @@ interface Executor {
 
     val supportStates: List<Pair<Int, String>>
 
-    fun setStatus(status: Boolean)
+    fun getSupportMode(): Int
+
+    fun setMode(mode: Int)
 
     fun checkAvailability(): Boolean
 

@@ -9,6 +9,16 @@
     <string name="Shizuku_warning">After granting Shizuku permissions, the software will have more privileges than ordinary applications. Please be aware of your device\'s security.</string>
     <string name="Shizuku_need_update">Shizuku version is outdated. Please update.</string>
 
+    <string name="switch_mode">Switch execute mode</string>
+    <string-array name="mode">
+        <item>User Mode</item>
+        <item>Shizuku Mode 1</item>
+        <item>Shizuku Mode 2</item>
+    </string-array>
+    <string name="not_support"> (not support)</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
     <string name="state_reset">Reset fold state</string>
 
     <string name="instruction">Click on the retrieved status below to switch</string>

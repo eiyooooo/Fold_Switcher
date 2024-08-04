@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.eiyooooo.foldswitcher.types.ExecuteMode
 import com.eiyooooo.foldswitcher.types.ShizukuStatus
 import com.eiyooooo.foldswitcher.wrappers.Executor
 import com.eiyooooo.foldswitcher.wrappers.ShizukuExecutor
@@ -22,12 +23,36 @@ class MainActivityViewModel : ViewModel() {
         private var checkShizukuPermissionJob: Job? = null
     }
 
-    val useShizukuExecutor = !UserExecutor.checkAvailability()
+    val userExecutorAvailability = UserExecutor.checkAvailability()
     fun getExecutor(): Executor {
-        return when {
-            !useShizukuExecutor -> UserExecutor
-            else -> ShizukuExecutor
+        if (_executeMode.value == ExecuteMode.MODE_UNKNOWN) {
+            when {
+                userExecutorAvailability -> {
+                    ExecuteMode.supportModeLevel = ExecuteMode.MODE_1
+                    _executeMode.value = ExecuteMode.MODE_1
+                }
+
+                ShizukuExecutor.getSupportMode() == ExecuteMode.MODE_2 -> {
+                    ExecuteMode.supportModeLevel = ExecuteMode.MODE_2
+                    _executeMode.value = ExecuteMode.MODE_2
+                    ShizukuExecutor.setMode(ExecuteMode.MODE_2)
+                }
+
+                ShizukuExecutor.getSupportMode() == ExecuteMode.MODE_3 -> {
+                    ExecuteMode.supportModeLevel = ExecuteMode.MODE_3
+                    _executeMode.value = ExecuteMode.MODE_3
+                    ShizukuExecutor.setMode(ExecuteMode.MODE_3)
+                }
+            }
         }
+        return if (_executeMode.value == ExecuteMode.MODE_1) UserExecutor else ShizukuExecutor
+    }
+
+    private val _executeMode: MutableStateFlow<Int> by lazy { MutableStateFlow(ExecuteMode.MODE_UNKNOWN) }
+    val executeMode: LiveData<Int> = _executeMode.asLiveData()
+
+    fun setExecuteMode(mode: Int) {
+        _executeMode.value = mode
     }
 
     private val _shizukuStatus: MutableStateFlow<ShizukuStatus?> by lazy { MutableStateFlow(null) }

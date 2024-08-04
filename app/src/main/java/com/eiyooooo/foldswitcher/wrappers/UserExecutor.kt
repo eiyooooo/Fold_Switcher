@@ -6,6 +6,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
+import com.eiyooooo.foldswitcher.types.ExecuteMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -16,7 +17,11 @@ object UserExecutor : Executor {
     private val _currentState: MutableStateFlow<Int?> by lazy { MutableStateFlow(null) }
     override val currentState: LiveData<Int?> = _currentState.asLiveData()
 
-    override fun setStatus(status: Boolean) {}
+    override fun getSupportMode(): Int {
+        return ExecuteMode.MODE_1
+    }
+
+    override fun setMode(mode: Int) {}
 
     private var availability: Boolean = false
     override fun checkAvailability(): Boolean {
