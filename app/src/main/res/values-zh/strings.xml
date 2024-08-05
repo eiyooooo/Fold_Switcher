@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">折叠屏切换器</string>
 
+    <string name="user_explanation">当前为用户模式\n若无法正常使用请尝试切换运行模式</string>
     <string name="Shizuku_explanation">折叠屏切换器需要Shizuku来执行操作</string>
     <string name="Shizuku_connected">Shizuku已连接</string>
     <string name="Shizuku_setup_instruction">Shizuku配置说明</string>

@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Fold Switcher</string>
 
+    <string name="user_explanation">Currently in user mode\nPlease try switching to a different execute mode if you are unable to switch state</string>
     <string name="Shizuku_explanation">Fold Switcher needs Shizuku to perform operation</string>
     <string name="Shizuku_connected">Shizuku connected</string>
     <string name="Shizuku_setup_instruction">Shizuku setup Instruction</string>

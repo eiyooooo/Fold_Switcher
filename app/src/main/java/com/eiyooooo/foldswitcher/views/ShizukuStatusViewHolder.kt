@@ -12,7 +12,7 @@ import rikka.recyclerview.BaseViewHolder.Creator
 
 class ShizukuStatusViewHolder(private val binding: ItemShizukuStatusBinding, root: View) : BaseViewHolder<ShizukuStatus>(root) {
     companion object {
-        val CREATOR = Creator<ShizukuStatus> { inflater: LayoutInflater, parent: ViewGroup? ->
+        val CREATOR = Creator<Any> { inflater: LayoutInflater, parent: ViewGroup? ->
             val outer = HomeItemContainerBinding.inflate(inflater, parent, false)
             val inner = ItemShizukuStatusBinding.inflate(inflater, outer.root, true)
             ShizukuStatusViewHolder(inner, outer.root)

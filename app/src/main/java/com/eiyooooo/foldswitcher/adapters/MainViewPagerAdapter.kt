@@ -15,13 +15,14 @@ import com.eiyooooo.foldswitcher.views.MainActivity
 import com.eiyooooo.foldswitcher.views.ShizukuInstructionViewHolder
 import com.eiyooooo.foldswitcher.views.ShizukuRequestViewHolder
 import com.eiyooooo.foldswitcher.views.ShizukuStatusViewHolder
+import com.eiyooooo.foldswitcher.views.StatusViewHolder
 import com.eiyooooo.foldswitcher.wrappers.ShizukuExecutor
 import rikka.recyclerview.IdBasedRecyclerViewAdapter
 import rikka.recyclerview.IndexCreatorPool
 
 class MainViewPagerAdapter(private val mainActivity: MainActivity, private val mainModel: MainActivityViewModel) : IdBasedRecyclerViewAdapter(ArrayList()) {
     companion object {
-        private const val ID_SHIZUKU_STATUS = 0L
+        private const val ID_STATUS = 0L
         private const val ID_SHIZUKU_INSTRUCTION = 1L
         private const val ID_SHIZUKU_REQUEST = 2L
         private const val ID_SWITCH_MODE = 3L
@@ -47,7 +48,11 @@ class MainViewPagerAdapter(private val mainActivity: MainActivity, private val m
         clear()
         shizukuStatus?.let { ShizukuExecutor.setMode(if (it == ShizukuStatus.HAVE_PERMISSION) ExecuteMode.MODE_ANY else ExecuteMode.MODE_UNKNOWN) }
 
-        addItem(ShizukuStatusViewHolder.CREATOR, shizukuStatus, ID_SHIZUKU_STATUS)
+        if (mainModel.executeMode.value == ExecuteMode.MODE_1) {
+            addItem(StatusViewHolder.CREATOR, shizukuStatus, ID_STATUS)
+        } else {
+            addItem(ShizukuStatusViewHolder.CREATOR, shizukuStatus, ID_STATUS)
+        }
         addItem(SwitchModeViewHolder.CREATOR, mainModel, ID_SWITCH_MODE)
 
         if (mainModel.executeMode.value == ExecuteMode.MODE_1) {
