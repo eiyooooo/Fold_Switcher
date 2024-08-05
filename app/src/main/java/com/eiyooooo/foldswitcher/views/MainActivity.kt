@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             executeMode?.let {
                 if (it == ExecuteMode.MODE_UNKNOWN) mainModel.getExecutor()
                 else mainModel.getExecutor().setMode(it)
-            }
+            } ?: mainModel.getExecutor()
             adapter.updateData(mainModel.shizukuStatus.value)
         }
         mainModel.shizukuStatus.observe(this) {
