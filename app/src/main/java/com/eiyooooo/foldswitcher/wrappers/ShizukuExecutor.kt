@@ -1,5 +1,7 @@
 package com.eiyooooo.foldswitcher.wrappers
 
+import android.annotation.SuppressLint
+import android.hardware.devicestate.DeviceState
 import android.hardware.devicestate.DeviceStateInfo
 import android.hardware.devicestate.IDeviceStateManagerCallback
 import android.os.IBinder
@@ -44,6 +46,8 @@ object ShizukuExecutor : Executor {
     }
 
     private var availability: Boolean = false
+
+    @SuppressLint("BlockedPrivateApi")
     override fun checkAvailability(): Boolean {
         if (mode == ExecuteMode.MODE_UNKNOWN) return false
         if (availability) return true
@@ -52,7 +56,14 @@ object ShizukuExecutor : Executor {
         try {
             if (supportStates.isEmpty()) {
                 supportMode = ExecuteMode.MODE_3
-                supportStates = DeviceStateManager.getInstance(true).deviceStateInfo.supportedStates?.map { it to "" }?.toList()!!
+                val deviceStateInfo = DeviceStateManager.getInstance(true).deviceStateInfo
+                supportStates = (deviceStateInfo.javaClass.getDeclaredField("supportedStates").get(deviceStateInfo) as List<*>).mapNotNull { state ->
+                    when (state) {
+                        is Int -> state to ""
+                        is DeviceState -> (state.javaClass.getDeclaredMethod("getIdentifier").invoke(state) as Int) to ""
+                        else -> null
+                    }
+                }
             } else {
                 supportMode = ExecuteMode.MODE_2
             }
@@ -62,8 +73,15 @@ object ShizukuExecutor : Executor {
             mode = supportMode
 
             DeviceStateManager.getInstance(true).registerCallback(object : IDeviceStateManagerCallback.Stub() {
+                @SuppressLint("BlockedPrivateApi")
                 override fun onDeviceStateInfoChanged(info: DeviceStateInfo) {
-                    _currentState.value = info.currentState
+                    val flagsField = info.javaClass.getDeclaredField("currentState")
+                    _currentState.value = try {
+                        flagsField.get(info) as Int
+                    } catch (_: Exception) {
+                        val state = flagsField.get(info) as? DeviceState
+                        state?.javaClass?.getDeclaredMethod("getIdentifier")?.invoke(state) as? Int ?: -1
+                    }
                 }
 
                 override fun onRequestActive(token: IBinder) {
@@ -81,13 +99,21 @@ object ShizukuExecutor : Executor {
         return true
     }
 
+    @SuppressLint("BlockedPrivateApi")
     override fun getCurrentStateOnce(): Int {
         if (checkAvailability()) {
             try {
                 if (mode == ExecuteMode.MODE_2) {
                     return executeShellCommand("cmd device_state print-state").trim().toInt()
                 } else if (mode == ExecuteMode.MODE_3) {
-                    return DeviceStateManager.getInstance(true).deviceStateInfo.currentState
+                    val info = DeviceStateManager.getInstance(true).deviceStateInfo
+                    val flagsField = info.javaClass.getDeclaredField("currentState")
+                    return try {
+                        flagsField.get(info) as Int
+                    } catch (_: Exception) {
+                        val state = flagsField.get(info) as? DeviceState
+                        state?.javaClass?.getDeclaredMethod("getIdentifier")?.invoke(state) as? Int ?: -1
+                    }
                 }
             } catch (e: Exception) {
                 return -1

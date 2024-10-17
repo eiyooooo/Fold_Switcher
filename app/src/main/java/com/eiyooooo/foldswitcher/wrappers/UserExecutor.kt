@@ -1,5 +1,7 @@
 package com.eiyooooo.foldswitcher.wrappers
 
+import android.annotation.SuppressLint
+import android.hardware.devicestate.DeviceState
 import android.hardware.devicestate.DeviceStateInfo
 import android.hardware.devicestate.IDeviceStateManagerCallback
 import android.os.IBinder
@@ -29,8 +31,15 @@ object UserExecutor : Executor {
         if (supportStates.isNotEmpty()) {
             try {
                 DeviceStateManager.getInstance(false).registerCallback(object : IDeviceStateManagerCallback.Stub() {
+                    @SuppressLint("BlockedPrivateApi")
                     override fun onDeviceStateInfoChanged(info: DeviceStateInfo) {
-                        _currentState.value = info.currentState
+                        val flagsField = info.javaClass.getDeclaredField("currentState")
+                        _currentState.value = try {
+                            flagsField.get(info) as Int
+                        } catch (_: Exception) {
+                            val state = flagsField.get(info) as? DeviceState
+                            state?.javaClass?.getDeclaredMethod("getIdentifier")?.invoke(state) as? Int ?: -1
+                        }
                     }
 
                     override fun onRequestActive(token: IBinder) {
