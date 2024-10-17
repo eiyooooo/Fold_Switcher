@@ -76,6 +76,7 @@ class MainViewPagerAdapter(private val mainActivity: MainActivity, private val m
         addItem(InstructionViewHolder.CREATOR, null, ID_INSTRUCTION)
         addItem(InstructionQuickSwitchViewHolder.CREATOR, null, ID_INSTRUCTION_QUICK_SWITCH)
         addItem(FoldStateViewHolder.CREATOR, FoldStateData(this, mainModel, -1, mainActivity.getString(R.string.state_reset)), ID_RESET_STATE)
+        idList.clear()
         var id = 7L
         mainModel.getExecutor().supportStates.forEach { pair ->
             val name = pair.second.ifEmpty { pair.first.toString() }
