@@ -22,8 +22,8 @@
 
     <string name="state_reset">Reset fold state</string>
 
-    <string name="instruction">Click on the retrieved status below to switch</string>
-    <string name="instruction_no_quick_switch">No quick switch available, long press the retrieved status below to add</string>
+    <string name="instruction">Click on the retrieved state below to switch</string>
+    <string name="instruction_no_quick_switch">No quick switch available, long press the retrieved state below to add</string>
     <string name="instruction_current_quick_switch">Current quick switch: %s, click me to delete</string>
     <string name="github">GitHub</string>
     <string name="licenses">Licenses</string>
