@@ -41,4 +41,7 @@
     <string name="posture_open">展开模式</string>
     <string name="posture_rear_display">后屏模式</string>
     <string name="posture_tent">帐篷模式</string>
+
+    <string name="no_state_id">未提供有效的状态ID。使用-1重置状态或使用非负值设置状态。</string>
+    <string name="no_executor_available">无可用方法切换折叠状态，请检查Shizuku设置。</string>
 </resources>

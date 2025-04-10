@@ -41,4 +41,7 @@
     <string name="posture_open">Open</string>
     <string name="posture_rear_display">Rear Display</string>
     <string name="posture_tent">Tent</string>
+
+    <string name="no_state_id">No valid state ID provided. Use -1 to reset or non-negative values to set state.</string>
+    <string name="no_executor_available">No available method to switch fold state. Please check Shizuku settings.</string>
 </resources>

@@ -30,6 +30,64 @@
 1. 长按获取到的折叠模式进行设置
 2. 安卓13及以上会出现提示添加，其他安卓版本需“手动下拉状态栏-编辑开关”进行添加
 
+## 🔄与其他应用集成
+
+您可以通过Tasker、MacroDroid等自动化应用或ADB命令控制折叠状态。
+
+### 方法一：使用Intent
+
+```kotlin
+// 设置特定折叠状态
+val intent = Intent()
+intent.setComponent(ComponentName("com.eiyooooo.foldswitcher", "com.eiyooooo.foldswitcher.ReceiverActivity"))
+intent.putExtra("state_id", 1) // 替换为所需的状态ID（非负整数）
+startActivity(intent)
+
+// 重置为默认状态
+val resetIntent = Intent()
+resetIntent.setComponent(ComponentName("com.eiyooooo.foldswitcher", "com.eiyooooo.foldswitcher.ReceiverActivity"))
+resetIntent.putExtra("state_id", -1)
+startActivity(resetIntent)
+```
+
+### 方法二：使用ADB命令
+
+```shell
+# 设置特定折叠状态（将1替换为所需的状态ID，非负整数）
+adb shell am start -n com.eiyooooo.foldswitcher/.ReceiverActivity --ei state_id 1
+
+# 重置为默认状态
+adb shell am start -n com.eiyooooo.foldswitcher/.ReceiverActivity --ei state_id -1
+```
+
+### 方法三：在Tasker、MacroDroid等自动化应用中集成
+
+在自动化应用中创建一个新任务，然后添加"系统"→"发送意图"操作，填写以下参数：
+
+**设置特定折叠状态：**
+- 操作: `无需填写`
+- 类别: `无需填写`
+- 类型: `Activity`
+- 包名: `com.eiyooooo.foldswitcher`
+- 类名: `com.eiyooooo.foldswitcher.ReceiverActivity`
+- 额外参数:
+  - 名称: `state_id`
+  - 类型: `整数`
+  - 值: `[所需状态ID]` (非负整数，例如: `1`)
+
+**重置为默认状态：**
+- 操作: `无需填写`
+- 类别: `无需填写`
+- 类型: `Activity`
+- 包名: `com.eiyooooo.foldswitcher`
+- 类名: `com.eiyooooo.foldswitcher.ReceiverActivity`
+- 额外参数:
+  - 名称: `state_id`
+  - 类型: `整数`
+  - 值: `-1`
+
+### 可用的状态ID可以在应用中长按获取到的状态查看。具体状态可能因设备而异。
+
 ## ⭐支持我
 - 如果你喜欢本应用，请给本仓库点星星哦
 
