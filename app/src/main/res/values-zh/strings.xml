@@ -31,6 +31,9 @@
     <string name="no_browser">没有默认浏览器</string>
     <string name="no_quick_switch">无快捷切换</string>
 
+    <string name="quick_switch_dialog_title">快捷切换设置</string>
+    <string name="quick_switch_dialog_message">当前状态名称：%s\n当前状态 ID：%d\n是否将此状态设为快捷切换？</string>
+
     <string name="posture_closed">闭合模式</string>
     <string name="posture_dual_display">双屏模式</string>
     <string name="posture_flipped">翻转模式</string>

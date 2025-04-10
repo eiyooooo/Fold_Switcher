@@ -31,6 +31,9 @@
     <string name="no_browser">No default browser</string>
     <string name="no_quick_switch">No quick switch</string>
 
+    <string name="quick_switch_dialog_title">Quick Switch Settings</string>
+    <string name="quick_switch_dialog_message">Current state name: %s\nCurrent state ID: %d\nDo you want to set this state as quick switch?</string>
+
     <string name="posture_closed">Closed</string>
     <string name="posture_dual_display">Dual Display</string>
     <string name="posture_flipped">Flipped</string>

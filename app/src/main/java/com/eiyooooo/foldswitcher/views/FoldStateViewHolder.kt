@@ -12,6 +12,7 @@ import com.eiyooooo.foldswitcher.databinding.HomeItemContainerHighBinding
 import com.eiyooooo.foldswitcher.databinding.ItemFoldStateBinding
 import com.eiyooooo.foldswitcher.helpers.SharedPreferencesHelper
 import com.eiyooooo.foldswitcher.types.FoldStateData
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import rikka.recyclerview.BaseViewHolder
 import rikka.recyclerview.BaseViewHolder.Creator
 
@@ -41,16 +42,23 @@ class FoldStateViewHolder(private val binding: ItemFoldStateBinding, private val
 
     override fun onLongClick(v: View): Boolean {
         if (data.state != -1) {
-            SharedPreferencesHelper.saveString("quickSwitchShowName", showName)
-            SharedPreferencesHelper.saveString("quickSwitchAdjustedName", data.adjustedName)
-            SharedPreferencesHelper.saveInt("quickSwitchState", data.state)
-            data.adapter.updateData(data.viewModel.shizukuStatus.value)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                data.adapter.statusBarManager.requestAddTileService(
-                    ComponentName(context, MyTileService::class.java),
-                    showName, Icon.createWithResource(context, data.iconId),
-                    { }, { })
-            }
+            MaterialAlertDialogBuilder(context)
+                .setTitle(R.string.quick_switch_dialog_title)
+                .setMessage(String.format(context.getString(R.string.quick_switch_dialog_message), showName, data.state))
+                .setPositiveButton(R.string.ok) { _, _ ->
+                    SharedPreferencesHelper.saveString("quickSwitchShowName", showName)
+                    SharedPreferencesHelper.saveString("quickSwitchAdjustedName", data.adjustedName)
+                    SharedPreferencesHelper.saveInt("quickSwitchState", data.state)
+                    data.adapter.updateData(data.viewModel.shizukuStatus.value)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        data.adapter.statusBarManager.requestAddTileService(
+                            ComponentName(context, MyTileService::class.java),
+                            showName, Icon.createWithResource(context, data.iconId),
+                            { }, { })
+                    }
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
         }
         return true
     }
