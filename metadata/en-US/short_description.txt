@@ -1,0 +1,1 @@
+Switch between various folding states on foldable devices
