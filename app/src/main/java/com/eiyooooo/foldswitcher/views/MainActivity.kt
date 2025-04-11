@@ -1,7 +1,6 @@
 package com.eiyooooo.foldswitcher.views
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Menu
@@ -10,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.eiyooooo.foldswitcher.R
 import com.eiyooooo.foldswitcher.adapters.MainViewPagerAdapter
 import com.eiyooooo.foldswitcher.databinding.ActivityMainBinding
@@ -17,7 +17,6 @@ import com.eiyooooo.foldswitcher.types.ExecuteMode
 import com.eiyooooo.foldswitcher.viewmodels.MainActivityViewModel
 import com.eiyooooo.foldswitcher.wrappers.ShizukuExecutor
 import com.eiyooooo.foldswitcher.wrappers.UserExecutor
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import rikka.recyclerview.addEdgeSpacing
 import rikka.recyclerview.addItemSpacing
 import rikka.recyclerview.fixEdgeEffect
@@ -77,16 +76,11 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(Intent.ACTION_VIEW)
                     intent.addCategory(Intent.CATEGORY_BROWSABLE)
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    intent.setData(Uri.parse("https://github.com/eiyooooo/Fold_Switcher"))
+                    intent.setData("https://github.com/eiyooooo/Fold_Switcher".toUri())
                     startActivity(intent)
                 } catch (ignored: Exception) {
                     Toast.makeText(this, getString(R.string.no_browser), Toast.LENGTH_SHORT).show()
                 }
-                true
-            }
-
-            R.id.licenses -> {
-                startActivity(Intent(this, OssLicensesMenuActivity::class.java))
                 true
             }
 

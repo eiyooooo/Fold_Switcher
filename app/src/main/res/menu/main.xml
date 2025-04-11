@@ -6,9 +6,4 @@
         android:icon="@drawable/github"
         android:title="@string/github"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/licenses"
-        android:icon="@drawable/license"
-        android:title="@string/licenses"
-        app:showAsAction="ifRoom" />
 </menu>
