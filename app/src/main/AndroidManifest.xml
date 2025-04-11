@@ -22,7 +22,11 @@
         </activity>
         <activity
             android:name=".ReceiverActivity"
+            android:excludeFromRecents="true"
             android:exported="true"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:taskAffinity=".receiver"
             android:theme="@style/Transparent" />
         <service
             android:name=".MyTileService"

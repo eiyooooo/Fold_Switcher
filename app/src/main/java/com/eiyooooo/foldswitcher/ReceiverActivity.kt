@@ -2,6 +2,7 @@ package com.eiyooooo.foldswitcher
 
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -16,8 +17,14 @@ class ReceiverActivity : Activity() {
         private const val TAG = "FoldSwitcherReceiver"
     }
 
+    @Suppress("DEPRECATION")
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, 0, 0)
+        } else {
+            overridePendingTransition(0, 0)
+        }
 
         val stateId = intent?.getIntExtra(EXTRA_STATE_ID, Int.MIN_VALUE) ?: Int.MIN_VALUE
 
@@ -37,6 +44,11 @@ class ReceiverActivity : Activity() {
         }
 
         finish()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, 0, 0)
+        } else {
+            overridePendingTransition(0, 0)
+        }
     }
 
     private fun setDeviceState(stateId: Int) {
