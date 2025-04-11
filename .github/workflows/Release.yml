@@ -19,10 +19,11 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - uses: gradle/gradle-build-action@v2
-        with:
-          gradle-version: current
-          arguments: assembleRelease
+      - uses: gradle/actions/setup-gradle@v4
+
+      - run: chmod +x ./gradlew
+
+      - run: ./gradlew assembleRelease
 
       - name: Setup build tool version variable
         shell: bash
@@ -31,21 +32,35 @@ jobs:
           echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
           echo Last build tool version is: $BUILD_TOOL_VERSION
 
-      - uses: r0adkll/sign-android-release@v1
-        id: sign_app
-        with:
-          releaseDirectory: app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-          alias: ${{ secrets.ALIAS }}
-          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
-        env:
-          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+      - name: Find release APK
+        shell: bash
+        run: |
+          APK_FILE=$(find app/build/outputs/apk/release -name "*.apk" | head -n 1)
+          echo "Found APK: $APK_FILE"
+          echo "APK_FILE=$APK_FILE" >> $GITHUB_ENV
 
-      - run: mv ${{steps.sign_app.outputs.signedReleaseFile}} Fold_Switcher_$GITHUB_REF_NAME.apk
+      - name: Decode Keystore from Base64
+        run: |
+          echo "${{ secrets.SIGNING_KEY }}" | base64 -d > signingKey.jks
+
+      - name: Sign APK using apksigner with --alignment-preserved
+        run: |
+          APKSIGNER=/usr/local/lib/android/sdk/build-tools/${{ env.BUILD_TOOL_VERSION }}/apksigner
+          $APKSIGNER sign \
+            --ks signingKey.jks \
+            --ks-key-alias "${{ secrets.ALIAS }}" \
+            --ks-pass pass:${{ secrets.KEY_STORE_PASSWORD }} \
+            --key-pass pass:${{ secrets.KEY_PASSWORD }} \
+            --alignment-preserved \
+            --out Fold_Switcher_${GITHUB_REF_NAME}.apk \
+            ${{ env.APK_FILE }}
+
+      - name: Verify signed APK
+        run: |
+          /usr/local/lib/android/sdk/build-tools/${{ env.BUILD_TOOL_VERSION }}/apksigner verify Fold_Switcher_${GITHUB_REF_NAME}.apk
 
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "*.apk"
+          artifacts: "Fold_Switcher_*.apk"
           token: ${{ github.token }}
           generateReleaseNotes: true
