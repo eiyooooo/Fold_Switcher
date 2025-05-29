@@ -15,7 +15,12 @@ English / [简体中文](./README_CN.md)
 - Most devices can switch modes in user mode (out-of-the-box), while a few devices require Shizuku mode for switching.
 
 ## 📥Download
-- [Click here to go to the download page][downloads-url]
+
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.eiyooooo.foldswitcher/)
+
+Or download the latest APK from the [Releases Section](https://github.com/eiyooooo/Fold_Switcher/releases/latest).
 
 ## 🚀Getting Started Guide
 
