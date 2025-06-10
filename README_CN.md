@@ -15,11 +15,16 @@
 - 大部分设备可运行在用户模式进行切换（开箱即用），少数设备需Shizuku模式进行切换
 
 ## 📥安装包及更新日志
-- [点击此处前往][downloads-url]
+
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.eiyooooo.foldswitcher/)
+
+或在[Releases 页面](https://github.com/eiyooooo/Fold_Switcher/releases/latest)下载最新的APK文件。
 
 ## 🚀上手指南
 
-1. [下载][downloads-url]并安装
+1. [下载](#安装包及更新日志)并安装
 2. 若提示需要Shizuku权限请[下载Shizuku](https://shizuku.rikka.app/zh-hans/download/)并参考[Shizuku手册](https://shizuku.rikka.app/zh-hans/guide/setup/)完成配置
 3. 点击获取到的折叠模式进行切换
 
