@@ -24,7 +24,7 @@ Or download the latest APK from the [Releases Section](https://github.com/eiyooo
 
 ## 🚀Getting Started Guide
 
-1. [Download][downloads-url] and install the apk.
+1. [Download](#download) and install the apk.
 2. If prompted for Shizuku permissions, please [download Shizuku](https://shizuku.rikka.app/download/) and refer to the [Shizuku manual](https://shizuku.rikka.app/guide/setup/) for configuration instructions.
 3. Click on the fold state to switch.
 
